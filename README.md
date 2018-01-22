@@ -9,7 +9,6 @@ Clone and then install the repository to the any folder(for example in `/wt/web/
 git clone https://github.com/maksimyurkov/employees-sample
 cd employees-sample
 npm install
-
 ```
 
 ### Usage
