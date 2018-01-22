@@ -1,0 +1,35 @@
+{
+  "name": "employees-sample",
+  "description": "Simple web component for demonstration of interaction with WebTutor.",
+  "version": "1.0.0",
+  "keywords": [
+    "web-components",
+    "WebTutor",
+    "sample"
+  ],
+  "main": "employees-sample.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack && babel employees-sample-es6.js -o employees-sample-es5.js",
+    "clean": "rimraf node_modules/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maksimyurkov/employees-sample.git"
+  },
+  "author": "Maksim Yurkov <yurkov.maksim.sergeevich@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/maksimyurkov/employees-sample/issues"
+  },
+  "homepage": "https://github.com/maksimyurkov/employees-sample#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "webpack": "^3.10.0",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.22",
+    "cleanslate": "^0.10.1"
+  }
+}

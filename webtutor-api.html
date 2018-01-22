@@ -1,0 +1,74 @@
+<%
+try {
+    var routes = {
+    	'/employees': true
+    }
+    Request.AddRespHeader("Access-Control-Allow-Origin", "*", false)
+    Request.AddRespHeader("Access-Control-Allow-Credentials", true)
+    Request.AddRespHeader("Content-Type", "application/json")
+
+    function initSession() {
+        var signedIn = Request.Session.HasProperty('Env') && Request.Session.Env.GetOptProperty('curUserID', null) !== null
+        if (!signedIn) throw new Error('401')
+        Env = Request.Session.Env
+    }
+    
+    function JSONstringify(obj) {
+        try {
+            if (IsArray(obj)) return tools.array_to_text(obj, 'json')
+            return tools.object_to_text(obj, 'json')
+        } catch (err) {
+            throw new Error('JSONstringify: ' + err.message)
+        }
+    }
+
+    function _employees() {
+        try {
+            var employees = []
+            var empArr = XQuery("for $elem in collaborators where $elem/is_dismiss!='true' return $elem")
+            var e
+            var temp
+            for(e in empArr) {
+                if(''+e.is_dismiss==="false") {
+                    temp = {}
+                    temp.id = '' + e.id
+                    temp.displayName = '' + e.fullname
+                    temp.position = '' + e.position_name
+                    temp.profileURL = '/view_doc.html?mode=collaborator&doc_id=&object_id=' + e.id
+                    temp.photoURL = '' + e.pict_url
+                    employees.push(temp)
+                }
+            }
+            return employees
+        } catch (err) {
+            throw new Error('_employees: ' + err.message)
+        }
+    }
+
+    ///////////////////
+    // Make response //
+    ///////////////////
+    var route = Request.UrlParam
+    var Env = {}
+
+    initSession()
+
+    if (!routes[route]) throw new Error('Not supported route')
+    var functionName = StrReplace(route, '\/', '_')
+
+    var response = eval('' + functionName + '()')
+    response = JSONstringify(response)
+
+} catch (err) {
+    var errResponse = {}
+    errResponse.code = 500
+    errResponse.message = err.message
+    if(err.message === '401') {
+        errResponse.code = 401
+        errResponse.message = 'Unauthorized'
+    }
+    response = JSONstringify(errResponse)
+}
+
+%>
+    <%=response%>
